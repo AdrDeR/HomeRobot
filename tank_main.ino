@@ -35,12 +35,16 @@ int pin09_dir2_mot_R   = 9;
 int time_stamp_A2;
 
 /* Motor speed and setpoint variables */
-int s_R  = 0;  // Actual speed right motor
-int s_L  = 0;  // Actual speed left motor
-int sp_R = 0;  // Speed setpoint right motor
-int sp_L = 0;  // Speed Setpoint left motor
+float s_R  = 0;  // Actual speed right motor
+float s_L  = 0;  // Actual speed left motor
+float sp_R = 30;  // Speed setpoint right motor
+float sp_L = 30;  // Speed Setpoint left motor
 
+float s_pwm_L = 0;
+float s_pwm_R = 0;  
 
+/* Serial communication */
+char rx_byte = 0;
 
 
 void setup() {
@@ -102,16 +106,39 @@ void setup() {
 
 
 void loop(){
-  Serial.print("Speed A=");
-  Serial.print(s_R);
-  Serial.print("Speed B=");
-  Serial.print(s_L);
-  Serial.print(" ");
-  Serial.print(s_L-s_R);
-  Serial.print(" ");
-  Serial.println(time_stamp_A2);
-  
-  if((s_L-s_R)<0)sp_R++;
 
-  //DriveMotor(sp_R,sp_L);
+  //if((s_L-s_R)<0)sp_R++;
+  
+  /* Speed controller muss noch in definiertem Zeitmuster aufgerufen werden! 
+   *  Z.B. Timer etc.!! 
+   */
+  s_pwm_L = S_Control_L_PI ( s_L, sp_L);
+  s_pwm_R = S_Control_R_PI ( s_R, sp_R);
+  
+  //DriveMotor(sp_R,s_pwm_L);
+  
+  DriveMotor(s_pwm_L,s_pwm_R);
+  
+  Serial.print("Speed R=");
+  Serial.print(s_R);
+  Serial.print(" ");
+  Serial.print("Speed L=");
+  Serial.print(s_L);
+  Serial.print(" s_L-s_R=");
+  Serial.print(s_L-s_R);
+  Serial.print(" s_pwm_L=");
+  Serial.print(s_pwm_L);
+  
+ // Serial.print(" s_Icon=");
+ // Serial.print(S_Icon);
+
+  //Serial.print(" error=");
+  //Serial.print(e);
+  
+  Serial.print(" time_stamp_a2=");
+  Serial.println(time_stamp_A2);
+
+
+
+ 
   }

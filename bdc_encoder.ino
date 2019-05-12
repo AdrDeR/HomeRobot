@@ -37,7 +37,8 @@ void PinA1(){
        
     if(time_stamp_A>0)
      {
-      s_R=264000/time_stamp_A;      
+      //s_R=264000/time_stamp_A;     
+      s_R=90000/time_stamp_A;  
      }
 
      //if(time_stamp_A>10000)s_R=0;
@@ -87,7 +88,8 @@ void PinB(){
     flag=0;
     if(time_stamp_B>0)
      {
-      s_L=264000/time_stamp_B;      
+      //s_L=264000/time_stamp_B;  
+      s_L=90000/time_stamp_B;      
      }
    }
    
