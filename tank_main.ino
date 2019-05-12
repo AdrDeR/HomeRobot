@@ -1,11 +1,13 @@
 /*
  * Project modules
+ * 
  * (1) tank_main.ino   = variables declaration/initialization, setup and loop function
  * (2) bdc_encoder.ino =  routines for encoder output handling, including interrupts service routines
  * (3) bdc_motor.ino
+ * 
  * Pinning / Setup
- * Pin 2 (Port Interrupt 2) for encoder motor 1
- * Pin 3 (Port Interrupt 3) for encoder motor 2
+ * Pin 2 (Port Interrupt 2) for encoder motor left
+ * Pin 3 (Port Interrupt 3) for encoder motor right
  * 
  * Board: ARDUINO MEGA 1650 r3
  * 
@@ -13,30 +15,33 @@
  * 
  */
 
-static int pin02_Encoder_Left  = 2;  // Hardware interrupt pin at digital pin 2 (INT4).  =Left side Motor
-static int pin18_Encoder_Left  = 18; // Hardware interrupt pin at digital pin 2 (INT3).  =Left side Motor
-static int pin03_Encoder_Right = 3;  // Hardware interrupt pin at digital pin 2 (INT5).  =Right Side Motor
-
-static unsigned int global_counterA=0;
-static int time_stamp_A2;
-
-static int s_R  = 0;  // Actual speed right motor
-static int s_L  = 0;  // Actual speed left motor
-static int sp_R = 0;  // Speed setpoint right motor
-static int sp_L = 0;  // Speed Setpoint left motor
-
-volatile int timer1_ofl_counter=0;
-volatile int timer1_counter;
-
-// Left DC Motor control pins motor control IC
+/*
+*******************************************************************************************************
+* Module global variables declaration 
+*******************************************************************************************************
+*/
+/* Left side DC Motor control pins motor control IC */
+int pin02_Encoder_Left  = 2;  // Hardware interrupt pin at digital pin 2 (INT4).  =Left side Motor
+int pin18_Encoder_Left  = 18; // Hardware interrupt pin at digital pin 2 (INT3).  =Left side Motor
 int pin04_enable_mot_L = 4;
 int pin05_dir1_mot_L   = 5;
 int pin06_dir2_mot_L   = 6;
 
-// Right DC Motor control pins motor control IC
+/* Right side DC Motor control pins motor control IC */
+int pin03_Encoder_Right = 3;  // Hardware interrupt pin at digital pin 2 (INT5).  =Right Side Motor
 int pin07_enable_mot_R = 7;
 int pin08_dir1_mot_R   = 8;
 int pin09_dir2_mot_R   = 9;
+int time_stamp_A2;
+
+/* Motor speed and setpoint variables */
+int s_R  = 0;  // Actual speed right motor
+int s_L  = 0;  // Actual speed left motor
+int sp_R = 0;  // Speed setpoint right motor
+int sp_L = 0;  // Speed Setpoint left motor
+
+
+
 
 void setup() {
   pinMode( pin02_Encoder_Left,  INPUT );//_PULLUP);  // configure pin2 as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
