@@ -1,8 +1,19 @@
+// modulename: bdc_encoder.ino
 
+
+/* Global counter to get time stamp */
+static unsigned int g_t_count=0;
+
+/* Timer 1 counter variables */
+volatile int timer1_ofl_counter=0;
+volatile int timer1_counter;
+
+
+/* Interrupt Service Routine for Encoder output motor left duty cycle and rotational direction check */
 void PinA1(){
   
   unsigned int counter = TCNT1;  // quickly save it
-  global_counterA=counter;
+  g_t_count=counter;
   static unsigned int time_stamp_A;
   static int flag=0;
 
@@ -45,7 +56,7 @@ void PinA2(){
   //cli(); //stop interrupts happening before we read pin values
    if(!timer1_ofl_counter)     
    {
-    time_stamp_A2=(int)counter-(int)global_counterA;
+    time_stamp_A2=(int)counter-(int)g_t_count;
    }
    else
    {
@@ -90,7 +101,4 @@ ISR(TIMER1_OVF_vect)        // interrupt service routine
   //timer1_counter=TCNT1;
   timer1_ofl_counter++;
   //digitalWrite(ledPin, digitalRead(ledPin) ^ 1);
-  //digitalWrite(pin_f_out,digitalRead(pin_f_out) ^ 1);
-  //digitalWrite(pin12_f_out,digitalRead(pin12_f_out) ^ 1);
-  //Serial.println(timer1_ofl_counter);
 }
