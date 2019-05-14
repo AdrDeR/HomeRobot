@@ -22,4 +22,4 @@ Motor Encoder / Speed Feedback
 - Timing information for the speed evaluation is derived by the Timer Unit of the Atmel IC on the Arduino
 
 ## Speed Control
-- 
+- Each DC motor is speed controlled with an PI controller. Sampling rate is 10 ms.
